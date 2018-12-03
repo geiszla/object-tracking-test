@@ -5,12 +5,11 @@ This module contains functions for data I/O and manipulation.
 """
 
 from glob import glob
-import math
 import os
 import re
 
 import numpy
-import pandas
+from pandas import read_table
 
 
 COLUMNS = ['topLeftX', 'topLeftY', 'bottomRightX', 'bottomRightY']
@@ -26,16 +25,18 @@ def get_data_from_directory(directory_name):
     Returns:
         pandas.DataFrame: The data read in from the matching directory
     """
+
     # Find directory
     data_directories = sorted([directory_path for directory_path, _, file_names in os.walk('./data')
         if 'gt.txt' in file_names and directory_name in directory_path])
 
     # Read in data-set metadata
     file_path = os.path.join(data_directories[0], 'gt.txt')
-    data = pandas.read_table(file_path, header=None, sep=r'[\s,]+', names=COLUMNS, engine='python')
+    data = read_table(file_path, header=None, sep=r'[\s,]+', names=COLUMNS, engine='python')
 
-    data = data.apply(lambda row: row.apply(lambda value: int(round(value))
-        if not math.isnan(value) else 0))
+    # Remove empty entries and convert location data to integers
+    data.dropna(inplace=True)
+    data = data.apply(lambda row: row.apply(lambda value: int(round(value))))
 
     # Read in image file names and add it to the data
     image_files = glob(os.path.join(data_directories[0], '*.jpg'))
