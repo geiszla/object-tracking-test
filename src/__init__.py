@@ -14,16 +14,21 @@ import numpy
 import pandas
 from skimage.io import imread
 
-from data import show_object_location, get_data_by_directory
+from data import show_object_location, get_data_from_directory
 
 
 def _init():
     # Read in a set of image data
-    # person_data = get_data_by_directory('Kwon_VTD\\soccer')
-    person_data = get_data_by_directory('BoBot\\Vid_J_person_floor')
+    # person_data = get_data_from_directory('Kwon_VTD\\soccer')
+    person_data = get_data_from_directory('BoBot\\Vid_J_person_floor')
     person_data.dropna(inplace=True)
     person_data.sample(3)
 
+    # _show_samples(person_data)
+
+    input('Press (almost) any key to exit.')
+
+def _show_samples(person_data):
     # Select a sample image and show it
     _, (axis1, axis2) = pyplot.subplots(1, 2, figsize=(20, 10))
 
@@ -47,8 +52,6 @@ def _init():
 
     pyplot.ion()
     pyplot.show()
-
-    input('Press (almost) any key to exit.')
 
 
 if __name__ == '__main__':

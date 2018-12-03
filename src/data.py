@@ -16,19 +16,19 @@ import pandas
 COLUMNS = ['topLeftX', 'topLeftY', 'bottomRightX', 'bottomRightY']
 
 
-def get_data_by_directory(directory_name):
+def get_data_from_directory(directory_name):
     """
-    Gets the data-set from the first directory found, which includes the given name.
+    Gets the data-set from the first directory found, whose path includes the given string.
 
     Args:
         directory_name (str): The name to search directories by
 
     Returns:
-        pandas.DataFrame: The data read in from the directory found
+        pandas.DataFrame: The data read in from the matching directory
     """
     # Find directory
-    data_directories = sorted([directory_path for directory_path, _, fileNames in os.walk('./data')
-        if 'gt.txt' in fileNames and directory_name in directory_path])
+    data_directories = sorted([directory_path for directory_path, _, file_names in os.walk('./data')
+        if 'gt.txt' in file_names and directory_name in directory_path])
 
     # Read in data-set metadata
     file_path = os.path.join(data_directories[0], 'gt.txt')
@@ -40,11 +40,11 @@ def get_data_by_directory(directory_name):
     # Read in image file names and add it to the data
     image_files = glob(os.path.join(data_directories[0], '*.jpg'))
     image_number_regex = re.compile(r'\d+$')
-    soccer_images = {
+    image_paths = {
         int(image_number_regex.search(os.path.splitext(file_path)[0]).group(0)): file_path
             for file_path in image_files
     }
-    data['path'] = data.index.map(lambda index: soccer_images.get(index + 2))
+    data['path'] = data.index.map(lambda index: image_paths.get(index + 2))
 
     print('Found {} image files in {}.'.format(len(image_files), data_directories[0]))
 
