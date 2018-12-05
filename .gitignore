@@ -4,6 +4,7 @@
 # Custom rules
 data/
 tmp/
+model_data/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

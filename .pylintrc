@@ -1,6 +1,7 @@
 [MASTER]
+extension-pkg-whitelist=cv2
 ignore=setup.py
 init-hook='import sys; sys.path.append("src")'
 
 [MESSAGES CONTROL]
-disable=C0330
+disable=C0330,E0401
